@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Jar of Life: Interactive Lesson (Final)</title>
+    <title>The Jar of Life: Challenge</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --primary: #00796b;
-            --bg-grad-1: #e0f2f1;
-            --bg-grad-2: #80cbc4;
-            --jar-glass: rgba(255, 255, 255, 0.25);
+            --bg-grad-1: #e0f7fa;
+            --bg-grad-2: #80deea;
+            --jar-glass: rgba(255, 255, 255, 0.3);
             --rock: #4e342e;
             --pebble: #78909c;
-            --sand: #fdd835;
+            --sand: #fbc02d;
         }
 
         body {
@@ -26,7 +26,7 @@
             min-height: 100vh; overflow-x: hidden;
         }
 
-        /* --- TOP HEADER (กระดานความรู้) --- */
+        /* --- HEADER (ปิดบังความหมาย) --- */
         .header-panel {
             width: 100%; max-width: 800px;
             background: white; border-radius: 15px; padding: 20px;
@@ -73,9 +73,9 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.15), inset 0 0 30px rgba(255,255,255,0.4);
             backdrop-filter: blur(3px);
             z-index: 10;
-            overflow: visible; /* อนุญาตให้ของล้น */
+            overflow: visible;
         }
-        .jar::before { /* ปากขวด */
+        .jar::before {
             content: ''; position: absolute; top: -15px; left: 10px; right: 10px; height: 15px;
             border: 8px solid white; border-bottom: none; border-radius: 10px 10px 0 0;
             background: rgba(255,255,255,0.3);
@@ -99,14 +99,13 @@
             pointer-events: none; z-index: 5;
         }
 
-        /* โซนของล้น (Overflow Zone) */
         .overflow-area {
             position: absolute; bottom: -50px; left: -150px;
             width: 580px; height: 500px;
             pointer-events: none; z-index: 20;
         }
 
-        /* --- ITEMS GRAPHICS --- */
+        /* Items Graphics */
         .item-rock {
             width: 80px; height: 65px;
             background: radial-gradient(circle at 30% 30%, #8d6e63, #3e2723);
@@ -117,7 +116,8 @@
             animation: rockDrop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
         }
-        .item-rock::after { content: 'สำคัญ'; opacity: 0.6; }
+        /* เอาคำว่าสำคัญออกก่อน เดี๋ยวสปอยล์ */
+        /* .item-rock::after { content: 'สำคัญ'; opacity: 0.6; } */
 
         .item-pebble {
             width: 16px; height: 16px;
@@ -126,15 +126,14 @@
             animation: pebbleDrop 0.4s ease-out;
         }
 
-        /* Animations */
         @keyframes rockDrop { 0% { transform: translateY(-400px) rotate(45deg); opacity: 0; } 100% { transform: translateY(0) rotate(0deg); opacity: 1; } }
         @keyframes pebbleDrop { 0% { transform: translateY(-300px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
         
-        /* Overflow Animations (ตกออกข้างนอก) */
+        /* Overflow Animations */
         @keyframes fallOutLeft {
             0% { transform: translate(120px, -450px); opacity: 1; }
-            40% { transform: translate(0px, -50px); } /* ชนปากขวด */
-            100% { transform: translate(-80px, 400px) rotate(-90deg); opacity: 1; } /* ตกพื้น */
+            40% { transform: translate(0px, -50px); }
+            100% { transform: translate(-80px, 400px) rotate(-90deg); opacity: 1; }
         }
         @keyframes fallOutRight {
             0% { transform: translate(160px, -450px); opacity: 1; }
@@ -142,16 +141,13 @@
             100% { transform: translate(360px, 400px) rotate(90deg); opacity: 1; }
         }
         
-        /* Class สำหรับของล้น */
         .of-rock-l { animation: fallOutLeft 1.2s forwards; position: absolute; bottom: 0; left: 0; }
         .of-rock-r { animation: fallOutRight 1.2s forwards; position: absolute; bottom: 0; left: 0; }
-        
-        /* กรวดล้น (ตกเร็วกว่านิดหน่อย และกระจายตัว) */
         .of-pebble-l { animation: fallOutLeft 1.0s forwards; position: absolute; bottom: 0; left: 0; width: 14px; height: 14px; background: var(--pebble); border-radius: 50%;}
         .of-pebble-r { animation: fallOutRight 1.0s forwards; position: absolute; bottom: 0; left: 0; width: 14px; height: 14px; background: var(--pebble); border-radius: 50%;}
 
 
-        /* --- CONTROLS --- */
+        /* --- CONTROLS (สลับตำแหน่งปุ่มตามสั่ง) --- */
         .controls {
             margin-top: 25px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
         }
@@ -165,15 +161,16 @@
         .btn:active { transform: scale(0.95); }
         .btn span { font-weight: bold; color: #444; font-size: 0.9rem; }
 
-        .btn-rock { border-bottom: 4px solid var(--rock); }
-        .btn-pebble { border-bottom: 4px solid var(--pebble); }
         .btn-sand { border-bottom: 4px solid var(--sand); }
+        .btn-pebble { border-bottom: 4px solid var(--pebble); }
+        .btn-rock { border-bottom: 4px solid var(--rock); }
+        
         .btn-reset { background: #ffebee; color: #d32f2f; border: 1px solid #ffcdd2; width: 100%; max-width: 200px;}
 
         /* --- MODAL --- */
         .modal-overlay {
             position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.8); z-index: 200;
+            background: rgba(0,0,0,0.85); z-index: 200;
             display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: 0.3s;
         }
@@ -188,6 +185,7 @@
         
         .m-icon { font-size: 4rem; margin-bottom: 15px; display: block; }
         .m-title { font-size: 1.4rem; font-weight: bold; margin-bottom: 10px; }
+        /* จัดข้อความเฉลยให้อ่านง่าย */
         .m-desc { text-align: left; color: #555; background: #f5f5f5; padding: 15px; border-radius: 10px; margin-bottom: 20px; line-height: 1.6;}
         .m-btn {
             background: var(--primary); color: white; border: none; padding: 12px 30px;
@@ -208,19 +206,19 @@
         <div class="info-grid">
             <div class="info-card ic-jar">
                 <h4><i class="fas fa-flask"></i> ขวดโหล</h4>
-                <p>เวลาชีวิตที่มีจำกัด<br>(24 ชม. / วัน)</p>
+                <p>ปริมาตรจำกัด<br>(125 ลบ.ซม.)</p>
             </div>
             <div class="info-card ic-rock">
                 <h4><i class="fas fa-circle"></i> ก้อนหิน</h4>
-                <p>เรื่องสำคัญที่สุด<br>(สุขภาพ/ครอบครัว)</p>
+                <p>วัตถุขนาดใหญ่<br>(4 ก้อน)</p>
             </div>
             <div class="info-card ic-pebble">
                 <h4><i class="fas fa-braille"></i> กรวด</h4>
-                <p>เรื่องสำคัญรองลงมา<br>(งาน/ทรัพย์สิน)</p>
+                <p>วัตถุขนาดกลาง<br>(48 ก้อน)</p>
             </div>
             <div class="info-card ic-sand">
                 <h4><i class="fas fa-wind"></i> ทราย</h4>
-                <p>เรื่องเล็กน้อย<br>(ความบันเทิง)</p>
+                <p>วัตถุขนาดเล็ก<br>(แทรกซึมได้)</p>
             </div>
         </div>
     </div>
@@ -235,16 +233,17 @@
         </div>
 
         <div class="controls">
-            <button class="btn btn-rock" onclick="addRock()">
-                <i class="fas fa-circle" style="color:var(--rock)"></i> <span>เติมหิน</span>
+            <button class="btn btn-sand" onclick="addSand()">
+                <i class="fas fa-wind" style="color:#fbc02d"></i> <span>เติมทราย</span>
             </button>
             <button class="btn btn-pebble" onclick="addPebble()">
                 <i class="fas fa-braille" style="color:var(--pebble)"></i> <span>เติมกรวด</span>
             </button>
-            <button class="btn btn-sand" onclick="addSand()">
-                <i class="fas fa-wind" style="color:#fbc02d"></i> <span>เติมทราย</span>
+            <button class="btn btn-rock" onclick="addRock()">
+                <i class="fas fa-circle" style="color:var(--rock)"></i> <span>เติมหิน</span>
             </button>
-            <div style="width: 100%; display: flex; justify-content: center;">
+            
+            <div style="width: 100%; display: flex; justify-content: center; margin-top:10px;">
                 <button class="btn btn-reset" onclick="resetGame()">
                     <i class="fas fa-redo"></i> <span>เริ่มใหม่</span>
                 </button>
@@ -256,19 +255,23 @@
         <div class="modal-box status-intro" id="modalBox">
             <i class="fas fa-lightbulb m-icon" id="mIcon"></i>
             <div class="m-title" id="mTitle">ยินดีต้อนรับ</div>
-            <div class="m-desc" id="mDesc">รายละเอียด...</div>
-            <button class="m-btn" onclick="closeModal()">ตกลง</button>
+            <div class="m-desc" id="mDesc">
+                ขวดโหลใบนี้มีพื้นที่จำกัด...<br>
+                แต่เรามีสิ่งของ 3 อย่างที่ต้องใส่ลงไปให้หมด (หิน, กรวด, ทราย)<br><br>
+                <b>ภารกิจ:</b> ลองจัดลำดับการเติมดูสิครับ ว่าทำอย่างไรถึงจะใส่ได้ครบทุกอย่าง?
+            </div>
+            <button class="m-btn" onclick="closeModal()">เริ่มกิจกรรม</button>
         </div>
     </div>
 
     <script>
-        // --- State ---
+        // State
         let hasRock = false;
         let hasPebble = false;
         let hasSand = false;
         let jarFull = false;
 
-        // --- Elements ---
+        // Elements
         const solidsLayer = document.getElementById('solidsLayer');
         const overflowLayer = document.getElementById('overflowLayer');
         const sandLayer = document.getElementById('sandLayer');
@@ -278,20 +281,20 @@
         const mDesc = document.getElementById('mDesc');
         const mIcon = document.getElementById('mIcon');
 
-        // 1. Start Intro
         window.onload = function() {
-            showModal('intro', 'สวัสดีครับ!', 
-            'นี่คือแบบจำลอง <b>"การบริหารเวลา"</b><br><br>ลองดูข้อมูลด้านบน แล้วทดลองเติมสิ่งของลงในขวดดูนะครับ ว่าต้องเรียงลำดับอย่างไรจึงจะใส่ได้ครบทุกอย่าง?');
+            showModal('intro', 'ยินดีต้อนรับ', '');
         };
 
-        // --- Game Logic ---
+        // --- GAME LOGIC ---
 
         function addRock() {
-            // ถ้าขวดเต็ม หรือใส่หินไปแล้ว -> ล้น
-            if ((jarFull || hasSand) && !hasRock) { triggerOverflow('rock'); return; }
+            // ถ้ามีทราย หรือ มีกรวด อยู่ก่อนแล้ว -> หินล้น! (บังคับหินต้องมาก่อนเพื่อน)
+            if ((jarFull || hasSand || hasPebble) && !hasRock) { 
+                triggerOverflow('rock'); 
+                return; 
+            }
 
             if (!hasRock) {
-                // ใส่หิน 4 ก้อนใหญ่ (Visual)
                 for(let i=0; i<4; i++) setTimeout(() => createVisualRock(solidsLayer), i * 150);
                 hasRock = true;
                 checkWin();
@@ -299,11 +302,13 @@
         }
 
         function addPebble() {
-            // ถ้าขวดเต็ม (มีทรายแล้ว) -> กรวดล้น
-            if ((jarFull || hasSand) && !hasPebble) { triggerOverflow('pebble'); return; }
+            // ถ้ามีทรายแล้ว -> กรวดล้น
+            if ((jarFull || hasSand) && !hasPebble) { 
+                triggerOverflow('pebble'); 
+                return; 
+            }
 
             if (!hasPebble) {
-                // ใส่กรวด 48 เม็ด (Visual)
                 for(let i=0; i<48; i++) setTimeout(() => createVisualPebble(solidsLayer), i * 15);
                 hasPebble = true;
                 checkWin();
@@ -313,17 +318,15 @@
         function addSand() {
             if (hasSand) return;
 
-            // ทรายไหลแทรกซึม
             hasSand = true;
             sandLayer.style.height = '100%';
             jarFull = true;
             setTimeout(checkWin, 1200);
         }
 
-        // --- OVERFLOW ANIMATION (ของล้น) ---
+        // --- OVERFLOW SYSTEM ---
         function triggerOverflow(type) {
             if (type === 'rock') {
-                // หินล้น 4 ก้อน
                 for(let i=0; i<4; i++) {
                     setTimeout(() => {
                         const div = document.createElement('div');
@@ -332,34 +335,38 @@
                         overflowLayer.appendChild(div);
                     }, i*200);
                 }
-                setTimeout(() => showModal('error', 'หินล้นออกมา!', 'คุณใส่ "ทราย" จนเต็มขวดแล้ว ทำให้ไม่มีที่ว่างเหลือสำหรับ "หินก้อนใหญ่" ครับ'), 1000);
+                setTimeout(() => showModal('error', 'หินล้นออกมา!', 
+                'คุณเลือกใส่สิ่งของชิ้นเล็กไปก่อน ทำให้ไม่มีที่ว่างเหลือสำหรับ <b>"ก้อนหิน"</b> ที่มีขนาดใหญ่<br><br>ลองเริ่มใหม่อีกครั้ง โดยเปลี่ยนลำดับดูนะครับ'), 1000);
             } 
             else if (type === 'pebble') {
-                // กรวดล้น (เทกระจาด 30 เม็ด)
                 for(let i=0; i<30; i++) {
                     setTimeout(() => {
                         const div = document.createElement('div');
-                        div.className = 'of-pebble-' + (Math.random() > 0.5 ? 'l' : 'r'); // สุ่มซ้ายขวา
-                        // สุ่ม delay นิดหน่อยให้ดูเป็นสายน้ำ
+                        div.className = 'of-pebble-' + (Math.random() > 0.5 ? 'l' : 'r');
                         div.style.animationDelay = (Math.random() * 0.5) + 's';
                         overflowLayer.appendChild(div);
                     }, i*20);
                 }
-                setTimeout(() => showModal('error', 'กรวดล้นออกมา!', 'ทรายเม็ดละเอียดได้เข้าไปแทนที่ช่องว่างหมดแล้ว กรวดแทรกตัวลงไปไม่ได้ครับ'), 1000);
+                setTimeout(() => showModal('error', 'กรวดล้นออกมา!', 
+                'ทรายเม็ดละเอียดได้เข้าไปแทนที่ช่องว่างหมดแล้ว ทำให้ใส่กรวดเพิ่มไม่ได้<br><br>ลองจัดลำดับความสำคัญใหม่นะครับ'), 1000);
             }
         }
 
-        // --- CHECK WIN ---
+        // --- WIN CONDITION & REVEAL ---
         function checkWin() {
+            // ต้องมีครบ 3 อย่าง
             if (hasRock && hasPebble && hasSand) {
                 setTimeout(() => {
-                    showModal('success', 'Perfect Balance!', 
-                    '<b>ยอดเยี่ยม! คุณบริหารเวลาได้ถูกต้อง</b><br><br>1. <b>หิน:</b> เรื่องสำคัญที่สุด (มาก่อน)<br>2. <b>กรวด:</b> เรื่องสำคัญรอง (แทรกตามช่องว่าง)<br>3. <b>ทราย:</b> เรื่องเล็กน้อย (เติมเต็มส่วนที่เหลือ)');
+                    showModal('success', 'Perfect Balance! (เฉลย)', 
+                    '<b>ยอดเยี่ยม! คุณบริหารเวลาได้ถูกต้องตามหลักการ</b><br><br>' +
+                    '⚫ <b>หิน คือ "เรื่องสำคัญที่สุด"</b> (ต้องมาก่อน) เช่น สุขภาพ, ครอบครัว, เป้าหมายชีวิต<br>' +
+                    '⚪ <b>กรวด คือ "เรื่องสำคัญรองลงมา"</b> (แทรกตามช่องว่าง) เช่น งาน, บ้าน, ทรัพย์สิน<br>' +
+                    '🟡 <b>ทราย คือ "เรื่องเล็กน้อย"</b> (เติมเต็มส่วนที่เหลือ) เช่น ความบันเทิง, โซเชียลมีเดีย');
                 }, 1000);
             }
         }
 
-        // --- VISUAL GENERATORS ---
+        // --- VISUALS ---
         function createVisualRock(container) {
             const div = document.createElement('div');
             div.className = 'item-rock';
@@ -375,14 +382,14 @@
             container.appendChild(div);
         }
 
-        // --- MODAL & RESET ---
         function showModal(status, title, desc) {
             modalBox.className = 'modal-box status-' + status;
             mTitle.innerHTML = title;
-            mDesc.innerHTML = desc;
+            // ถ้าเป็น Intro ให้ใช้ text จาก html (ถ้าส่ง desc ว่าง)
+            if(desc) mDesc.innerHTML = desc;
             
-            if(status === 'intro') mIcon.className = 'fas fa-book-open m-icon';
-            if(status === 'error') mIcon.className = 'fas fa-exclamation-circle m-icon';
+            if(status === 'intro') mIcon.className = 'fas fa-question-circle m-icon';
+            if(status === 'error') mIcon.className = 'fas fa-exclamation-triangle m-icon';
             if(status === 'success') mIcon.className = 'fas fa-star m-icon';
             
             modal.classList.add('active');
